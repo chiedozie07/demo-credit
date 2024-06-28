@@ -1,0 +1,7 @@
+POST http://localhost:7000/users/6/transfer
+content-type: application/json
+
+{
+   "recipientEmail": "danieldamian@gmail.com",
+   "amount": 200
+}

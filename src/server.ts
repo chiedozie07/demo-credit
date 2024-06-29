@@ -1,8 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
-import userRoutes from './routes/api/userRoutes';
+import userTransactionApiRoutes from './routes/api/userRoutes';
 import dotenv from 'dotenv';
-import UserModel, { IUserProps } from '../src/models/UserModel';
 
 dotenv.config();
 
@@ -19,43 +18,17 @@ if (process.env.NODE_ENV === 'development') {
 } else {
   app.use(morgan('production'));
 };
-// const getUsersData = async (): Promise<void> => {
-//   const users = await UserModel.getUsers();
-//   return console.log('USERS:', users);
-// };
-// getUsersData();
 
-//endpoints/routes configurations
+//endpoints/routes definition
 app.get('/', (_req: Request, res: Response) => {
-    res.send('Welcome to DemoCredit server!');
+    res.send('Welcome to Chiedozie\'s DemoCredit server app for Lendsqr Backend Engineer Assessment V2!');
 });
-app.use(userRoutes);
+app.use(userTransactionApiRoutes);
 
-//Error handling
+//handle errors gracefully
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error('Server Error:', err.stack);
   res.status(500).send('Something went wrong probably due to internal server error, please try again!');
 });
-
-// class AppError extends Error {
-//   statusCode: number;
-
-//   constructor(message: string, statusCode: number = 500) {
-//     super(message);
-//     this.statusCode = statusCode;
-//     this.name = this.constructor.name;
-//     Error.captureStackTrace(this, this.constructor);
-//   }
-// }
-
-// app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-//   if (err instanceof AppError) {
-//     console.error(`AppError: ${err.message}`);
-//     res.status(err.statusCode).send(err.message);
-//   } else {
-//     console.error(`InternalServerError: ${err.stack}`);
-//     res.status(500).send('Something went wrong probably due to an internal server error, please try again!');
-//   }
-// });
 
 app.listen(PORT, () => console.log(`DemoCredit server is running on port: http://localhost:${PORT}`));

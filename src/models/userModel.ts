@@ -15,7 +15,8 @@ export interface IUserProps {
   dob: string;
   created_at?: Date;
   updated_at?: Date;
-}
+  token?: string;
+};
 
 // Create a new user model and transaction methods
 class UserModel {
@@ -25,24 +26,27 @@ class UserModel {
     return knex(this.tableName).insert(user);
   };
 
+  // Exclude password when fetching by ID
   public async findById(id: number, trx?: any): Promise<IUserProps | undefined> {
-    return trx ?
-      trx(this.tableName).where({ id }).first() :
-      knex(this.tableName).where({ id }).first();
-  };
+    const query = trx ? trx(this.tableName) : knex(this.tableName);
+    return query.select('id', 'first_name', 'last_name', 'email', 'phone', 'next_of_kind', 'dob', 'account_no', 'balance', 'created_at', 'updated_at')
+      .where({ id }).first();
+  }
 
+  // Exclude password when fetching by email
   public async findByEmail(email: string, trx?: any): Promise<IUserProps | undefined> {
-    return trx ?
-      trx(this.tableName).where({ email }).first() :
-      knex(this.tableName).where({ email }).first();
+    const query = trx ? trx(this.tableName) : knex(this.tableName);
+    return query.select('id', 'first_name', 'last_name', 'email', 'phone', 'next_of_kind', 'dob', 'account_no', 'balance', 'created_at', 'updated_at')
+      .where({ email }).first();
   };
-
+  
+  //update the user's account balance with the amount
   public async updateBalance(id: number, amount: number, trx?: any): Promise<void> {
     const query = trx ? trx(this.tableName) : knex(this.tableName);
     await query.where({ id })
       .update({
         balance: knex.raw('balance + ?', [amount]),
-        updated_at: knex.fn.now() // Update the updated_at field
+        updated_at: knex.fn.now()
       });
   };
   // Get a list of all users excluding passwords

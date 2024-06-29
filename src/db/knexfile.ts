@@ -1,6 +1,5 @@
 import { Knex } from 'knex';
 import dotenv from 'dotenv';
-// import migration from './src/db/migrations/20230623_create_users_table';
 
 dotenv.config();
 
@@ -10,12 +9,12 @@ interface IKnexConfigProps {
 
 const knexConfig: IKnexConfigProps = {
   development: {
-    client: 'mysql2',
+    client: 'mysql',
     connection: {
-      host: '127.0.0.1',
-      user: 'root',
-      password: '@techGuru.123',
-      database: 'demo_credit_wallet'
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME
     },
     migrations: {
       directory: './src/db/migrations',
@@ -30,7 +29,7 @@ const knexConfig: IKnexConfigProps = {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      database: process.env.DB_NAME
     },
     migrations: {
       directory: './src/db/migrations',

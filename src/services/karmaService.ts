@@ -4,38 +4,37 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Constants
-const KARMA_API_URL = process.env.KARMA_API_BASE_URL;
+const KARMA_API_URL = process.env.KARMA_API_URL;
 const KARMA_API_KEY = process.env.KARMA_API_KEY;
 
-
-// Get blacklisted users data
-export async function getBlacklistedUsersData(blacklistedEmail: string): Promise<boolean> {
+// check if the user is on the KARMA blacklist
+export const isUserBlacklisted = async(email: string): Promise<{ isBlacklisted: boolean, data?: any }> => {
   try {
-    const response = await axios.get(KARMA_API_URL!);
-    if (response.status !== 200) throw new Error('Failed to retrieve data from Karma API');
-    console.log('Blacklisted Data Response:', response.data);
-    // Check if the user with the email is blacklisted
-    const isUserBlacklisted = response.data.some((user: any) => user.email === blacklistedEmail);
-    if (isUserBlacklisted) console.log('User is blacklisted:', blacklistedEmail);
-    return isUserBlacklisted;
+    const apiUrl = `${KARMA_API_URL}/${encodeURIComponent(email)}`;
+    const response = await axios.get(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${KARMA_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('KARMA API Response:', response.data);
+    // Check if the response status is 'success'
+    if (response.data.status === 'success' && response.data.data.karma_identity || response.data.data.reporting_entity.email === email) {
+      return { isBlacklisted: true, data: response.data.data };
+    };
+    // return false if the user is not blacklisted
+    return { isBlacklisted: false };
   } catch (error: any) {
-    console.error('Error checking blacklist status:', error);
-    throw new Error(`Failed to check blacklist status: ${error.message}`);
-  }
-};
-
-export async function isBlacklisted(email: string): Promise<boolean> {
-  try {
-    const response = await axios.post(
-      KARMA_API_URL!,
-      { email },
-      { headers: { 'Authorization': `Bearer ${KARMA_API_KEY}` } }
-    );
-    console.log('Blacklisted Data Response:', response);
-    return response.data.blacklisted;
-  } catch (error) {
-    console.error('Error checking blacklist status:', error);
-    return false;
+    if (error.response) {
+      // handling errors and the specific http status codes gracefully
+      if (error.response.status === 404) {
+        console.warn('User not found in KARMA API:', email);
+        return { isBlacklisted: false };
+      };
+      console.error('Error checking KARMA blacklist:', error.response.data);
+    } else {
+      console.error('Error checking KARMA blacklist:', error.message);
+    }
+    throw new Error(`Failed to check KARMA blacklist: ${error.message}`);
   }
 };

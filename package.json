@@ -4,7 +4,7 @@
   "description": "Demo Credit is a mobile lending app that requires wallet functionality.",
   "main": "dist/server.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --config jest.config.ts",
     "build": "tsc",
     "start": "node ./dist/server.js",
     "dev": "nodemon"

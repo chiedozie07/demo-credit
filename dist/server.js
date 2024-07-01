@@ -31,7 +31,5 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something went wrong, probably due to an internal server error. Please try again!');
 });
 // Export the server for testing
-const server = app.listen(PORT, () => {
-    console.log(`DemoCredit server is running on port: http://localhost:${PORT}`);
-});
+const server = app.listen(PORT, () => console.log(`DemoCredit server is running on port: http://localhost:${PORT}`));
 exports.default = server;

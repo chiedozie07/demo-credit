@@ -31,8 +31,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Export the server for testing
-const server = app.listen(PORT, () => {
-  console.log(`DemoCredit server is running on port: http://localhost:${PORT}`);
-});
+const server = app.listen(PORT, () => console.log(`DemoCredit server is running on port: http://localhost:${PORT}`));
 
 export default server;

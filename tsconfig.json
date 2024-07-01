@@ -12,6 +12,10 @@
   "exclude": [
     "node_modules",
     "tests",
+    "jest.config.ts",
+    "README.md",      
+    "LICENSE",      
+    ".env",          
     "restClientApiTest.http",
     "deployDB.sql"
   ]

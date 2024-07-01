@@ -3,5 +3,5 @@ content-type: application/json
 
 {
     "recipientEmail": "chikelawrence@example.com",
-    "amount": 700
+    "amount": 200
 }

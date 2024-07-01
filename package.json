@@ -7,7 +7,7 @@
     "test": "jest --config jest.config.ts",
     "build": "tsc",
     "start": "node ./dist/server.js",
-    "dev": "nodemon"
+    "dev": "nodemon -r tsconfig-paths/register --exec ts-node src/server.ts"
   },
   "author": "Chiedozie Ezidiegwu",
   "license": "ISC",
@@ -35,6 +35,7 @@
     "knex": "^3.1.0",
     "mongoose": "^8.4.4",
     "mysql": "^2.18.1",
-    "mysql2": "^3.10.1"
+    "mysql2": "^3.10.1",
+    "tsconfig-paths": "^4.2.0"
   }
 }

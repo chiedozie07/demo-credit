@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@models/*": ["src/models/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@routes/*": ["src/routes/*"]
+    },
     "outDir": "./dist",
     "rootDir": "./src",
     "module": "commonjs",
@@ -11,12 +17,16 @@
   "include": ["src/**/*"],
   "exclude": [
     "node_modules",
+    "dist",
     "tests",
+    "*.test.ts",
+    "jest.config.ts",
     "jest.config.ts",
     "README.md",      
-    "LICENSE",      
-    ".env",          
+    "LICENSE",
+    ".env",      
     "restClientApiTest.http",
-    "deployDB.sql"
+    "deployDB.sql",
+    "nodemon.json"
   ]
 }

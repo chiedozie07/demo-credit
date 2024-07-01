@@ -56,7 +56,7 @@ export async function createUser(req: Request, res: Response) {
       password: hashedPassword
     });
     // Generate JWT token for the new user
-    const userToken = jwt.sign({ userId: newUserId[0] }, process.env.AUTH_KEY, { expiresIn: 3600 });
+    const userToken = jwt.sign({ userId: newUserId[0] }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 3600 });
     // Get the new user's data
     const user = await UserModel.getUser(newUserId[0]);
     if (!user) {

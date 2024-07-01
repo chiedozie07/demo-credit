@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // Endpoints/routes definition
 app.get('/', (_req: Request, res: Response) => {
-  res.send('Welcome to Chiedozie\'s DemoCredit server app for Lendsqr Backend Engineer Assessment V2!');
+  res.send('Welcome to Chiedozie\'s Lendsqr Backend Engineer Assessment V2 DemoCredit wallet server app!');
 });
 app.use(usersTransactionApiRoutes);
 

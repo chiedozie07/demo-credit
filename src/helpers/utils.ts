@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 // Generate random numbers
 export const getRandom = (length: number): number => {
   return Math.floor(
@@ -18,3 +22,14 @@ export const password_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&
 export const email_regex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
 export const accountNo_regex = /^(?=.*[0-9])(?=.{10,})/;
 export const phone_regex = /^[\+]?[(]?[0-9]{9,13}[)]?$/;
+
+//Ensuring Type Safety while getting the env number key/property
+export const getEnvNumber = (key: string, defaultValue?: number): number | undefined => {
+  const value = process.env[key];
+  if (!value) {
+    return defaultValue;
+  }
+  const parsed = Number(value);
+  return isNaN(parsed) ? defaultValue : parsed;
+};
+

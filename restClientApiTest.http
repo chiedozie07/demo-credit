@@ -1,12 +1,7 @@
-POST http://localhost:7000/users
+POST http://localhost:7000/users/1/transfer
 content-type: application/json
 
 {
-   "first_name": "Nonso",
-    "last_name": "Obodo",
-    "email": "nonsoobodo@gmail.com",
-    "phone": "08023456588",
-    "next_of_kind": "Chucks Obodo",
-    "dob": "04/08/1999",
-    "password": "password123"
+    "recipientEmail": "chikelawrence@example.com",
+    "amount": 500
 }

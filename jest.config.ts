@@ -7,9 +7,11 @@ const config: Config = {
   moduleFileExtensions: ['ts', 'js', 'json'],
   rootDir: 'tests',
   moduleNameMapper: {
-    '^@src/(.*)$': '<rootDir>/../src/$1',
-  },
+    '^@models/(.*)$': '<rootDir>/src/models/$1',
+    '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
+    '^@routes/(.*)$': '<rootDir>/src/routes/$1',
+    '^@db/(.*)$': '<rootDir>/src/db/$1'
+  }
 };
 
 export default config;
-

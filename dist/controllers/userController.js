@@ -16,7 +16,6 @@ exports.createUser = createUser;
 exports.fundAccount = fundAccount;
 exports.transferFunds = transferFunds;
 exports.withdrawFunds = withdrawFunds;
-// import UserModel from '@models/UserModel';
 const UserModel_1 = __importDefault(require("../models/UserModel"));
 const karmaService_1 = require("../services/karmaService");
 const bcryptjs = require('bcryptjs');

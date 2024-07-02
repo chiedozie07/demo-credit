@@ -1,4 +1,7 @@
+import http from 'http';
 import express, { Request, Response, NextFunction } from 'express';
+import socketio from 'socket.io';
+
 import morgan from 'morgan';
 import usersTransactionApiRoutes from './routes/api/userRoutes';
 import dotenv from 'dotenv';
@@ -6,7 +9,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Bodyparser that handles incoming and outgoing API JSON data
 app.use(express.json());
@@ -30,7 +32,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send('Something went wrong, probably due to an internal server error. Please try again!');
 });
 
-// Export the server for testing
-const server = app.listen(PORT, () => console.log(`DemoCredit server is running on port: http://localhost:${PORT}`));
-
-export default server;
+export default app;

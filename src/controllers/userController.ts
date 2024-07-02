@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-// import UserModel from '@models/UserModel';
 import UserModel from '../models/UserModel';
 import { isUserBlacklisted } from '../services/karmaService';
 const bcryptjs = require('bcryptjs');
@@ -110,6 +109,7 @@ export async function fundAccount(req: Request, res: Response) {
 export async function transferFunds(req: Request, res: Response) {
   const { userId } = req.params;
   const { recipientEmail, amount } = req.body;
+  
   // Validate input
   if (!userId || !recipientEmail || !amount || isNaN(amount) || amount <= 0) return res.status(400).json({ message: 'Invalid input data' });
   try {
@@ -124,7 +124,7 @@ export async function transferFunds(req: Request, res: Response) {
       const recipient = await UserModel.findByEmail(recipientEmail, trx);
       if (!recipient || !recipient.id) return res.status(404).json({ message: 'Recipient not found' });
       // Perform the fund transfer within the transaction
-      await UserModel.updateBalance(sender.id, - amount, trx);
+      await UserModel.updateBalance(sender.id, -amount, trx);
       await UserModel.updateBalance(recipient.id, amount, trx);
       // Commit the transaction
       await trx.commit();
@@ -154,7 +154,7 @@ export async function withdrawFunds(req: Request, res: Response) {
     //check or confirm if the user has sufficient amount to withhed
     if (user.balance < amount) return res.status(400).json({ message: 'Insufficient funds' });
     //debit the user's wallet/account with the amount
-    await UserModel.updateBalance(user.id!, - amount);
+    await UserModel.updateBalance(user.id!, -amount);
     console.log( 'message:', 'Funds withdrawn successfully!', 'amount_withdrawn:', amount, 'updatedUserData:', user);
     return res.status(200).json({ message: 'Funds withdrawn successfully!', amount_withdrawn: amount, updatedUserData: user });
   } catch (error) {

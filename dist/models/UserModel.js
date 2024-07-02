@@ -24,7 +24,6 @@ class UserModel {
             return (0, knex_1.default)(this.tableName).insert(user);
         });
     }
-    ;
     // Exclude password when fetching by ID
     findById(id, trx) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -61,7 +60,6 @@ class UserModel {
                 .select('id', 'first_name', 'last_name', 'email', 'phone', 'account_no', 'next_of_kind', 'dob', 'balance', 'created_at', 'updated_at');
         });
     }
-    ;
     // Get a user by ID excluding password
     getUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -71,7 +69,5 @@ class UserModel {
                 .first();
         });
     }
-    ;
 }
-;
 exports.default = new UserModel();

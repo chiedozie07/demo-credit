@@ -9,12 +9,12 @@ interface IKnexConfigProps {
 };
 
 //define database url configuration
-const databaseUrl = process.env.MYSQL_URL ? process.env.MYSQL_URL : `mysql://${process.env.MYSQLUSER}:${process.env.MYSQLPASSWORD}@${process.env.MYSQLHOST}:${process.env.MYSQLPORT}/${process.env.MYSQLDATABASE}`;
+const MYSQL_URL = process.env.MYSQL_URL ? process.env.MYSQL_URL : `mysql://${process.env.MYSQLUSER}:${process.env.MYSQLPASSWORD}@${process.env.MYSQLHOST}:${process.env.MYSQLPORT}/${process.env.MYSQLDATABASE}`;
 
 const knexConfig: IKnexConfigProps = {
   production: {
     client: 'mysql',
-    connection: databaseUrl || {
+    connection: MYSQL_URL || {
       host: process.env.MYSQLHOST,
       user: process.env.MYSQLUSER,
       password: process.env.MYSQLPASSWORD,

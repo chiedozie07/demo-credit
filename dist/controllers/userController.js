@@ -166,12 +166,8 @@ function transferFunds(req, res) {
                 // Get updated user information
                 const updatedSender = yield userModel_1.default.findById(sender.id);
                 const updatedRecipient = yield userModel_1.default.findByEmail(recipientEmail);
+                res.status(200).json({ message: 'Funds transferred successfully', amount_transfered: amount, updatedSenderData: updatedSender });
                 console.log('message:', 'Funds transferred successfully', 'amount:', amount, 'updatedSenderData:', updatedSender, 'updatedRecipientData:', updatedRecipient);
-                res.status(200).json({
-                    message: 'Funds transferred successfully',
-                    amount_transfered: amount,
-                    updatedSenderData: updatedSender,
-                });
             }));
         }
         catch (error) {

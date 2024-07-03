@@ -124,19 +124,15 @@ export async function transferFunds(req: Request, res: Response) {
       const recipient = await UserModel.findByEmail(recipientEmail, trx);
       if (!recipient || !recipient.id) return res.status(404).json({ message: 'Recipient not found' });
       // Perform the fund transfer within the transaction
-      await UserModel.updateBalance(sender.id, -amount, trx);
+      await UserModel.updateBalance(sender.id, - amount, trx);
       await UserModel.updateBalance(recipient.id, amount, trx);
       // Commit the transaction
       await trx.commit();
       // Get updated user information
       const updatedSender = await UserModel.findById(sender.id);
       const updatedRecipient = await UserModel.findByEmail(recipientEmail);
+      res.status(200).json({ message: 'Funds transferred successfully', amount_transfered: amount, updatedSenderData: updatedSender});
       console.log('message:', 'Funds transferred successfully', 'amount:', amount, 'updatedSenderData:', updatedSender, 'updatedRecipientData:', updatedRecipient);
-      res.status(200).json({ 
-        message: 'Funds transferred successfully', 
-        amount_transfered: amount, 
-        updatedSenderData: updatedSender, 
-      });
     });
   } catch (error) {
     console.error('Error transferring fund:', error);
@@ -154,7 +150,7 @@ export async function withdrawFunds(req: Request, res: Response) {
     //check or confirm if the user has sufficient amount to withhed
     if (user.balance < amount) return res.status(400).json({ message: 'Insufficient funds' });
     //debit the user's wallet/account with the amount
-    await UserModel.updateBalance(user.id!, -amount);
+    await UserModel.updateBalance(user.id!, - amount);
     console.log( 'message:', 'Funds withdrawn successfully!', 'amount_withdrawn:', amount, 'updatedUserData:', user);
     return res.status(200).json({ message: 'Funds withdrawn successfully!', amount_withdrawn: amount, updatedUserData: user });
   } catch (error) {

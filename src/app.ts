@@ -1,7 +1,6 @@
 import http from 'http';
 import express, { Request, Response, NextFunction } from 'express';
 import socketio from 'socket.io';
-
 import morgan from 'morgan';
 import usersTransactionApiRoutes from './routes/api/userRoutes';
 import dotenv from 'dotenv';
@@ -13,12 +12,7 @@ const app = express();
 // Bodyparser that handles incoming and outgoing API JSON data
 app.use(express.json());
 
-// Dev logging
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-} else {
-  app.use(morgan('production'));
-};
+
 
 // Endpoints/routes definition
 app.get('/', (_req: Request, res: Response) => {

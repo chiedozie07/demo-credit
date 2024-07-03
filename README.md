@@ -1,7 +1,7 @@
-**App Name: DemoCredit**
+## App Name: DemoCredit
 
 ## Brief Description: 
-DemoCredit is Chiedozie's Lendsqr backend engineer assessment V2 mobile lending app that requires wallet functionality. This is needed as borrowers need a wallet to receive the loans they have been granted and also send the money for repayments.
+DemoCredit is Chiedozie's Lendsqr backend engineer assessment V2 mobile lending app MVP version that requires wallet functionality. This is needed as borrowers need a wallet to receive the loans they have been granted and also send the money for repayments.
 
 ## Table of Contents
 1. [Features](#features)
@@ -11,7 +11,7 @@ DemoCredit is Chiedozie's Lendsqr backend engineer assessment V2 mobile lending 
 5. [Usage](#usage)
 6. [Installation](#installation)
    
-# Features 
+## Features 
 1. New user creation, this feature creates new user with the DemoCredit required data for their onbording.
 2. Existing user account funding, is a feature that enables the user to fund their account after they have been onborded.
 3. Funds transfer, with this feafure a user is able to transfer funds directly from their account's wallet to another user.
@@ -32,15 +32,15 @@ Include license information if applicable.
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contact
-Name: Chiedozie Ezidiegwu
-Email: ezidiegwuchiedozie17@gmail.com
-LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/chiedozie-ezidiegwu-9859a5167/)
+* Name: Chiedozie Ezidiegwu
+* Email: ezidiegwuchiedozie17@gmail.com
+* LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/chiedozie-ezidiegwu-9859a5167/)
 
 ## Installation
 ## Step-by-step guide on how to install your project.
-Prerequisites
-Node.js (LTS version)
-MySQL database
+- Prerequisites
+- Node.js (LTS version)
+- MySQL database
 
 ## Steps
 ## 1: Clone the Repository:
@@ -48,12 +48,12 @@ MySQL database
 git clone https://github.com/chiedozie07/demo-credit.git
 ```
 
-# 2: Change to the project directory and install Dependencies:
+## 2: Change to the project directory and install Dependencies:
 ```
 npm install
 ```
 
-# 3: Set Up Environment Variables:
+## 3: Set Up Environment Variables:
 ```
 DB_HOST=localhost
 DB_USER=root
@@ -62,11 +62,14 @@ DB_NAME=demo_credit_wallet
 KARMA_API_URL=https://adjutor.lendsqr.com/v2/verification/karma/:identity
 KARMA_API_KEY=yourapikey
 ```
-# 4: Setup MySQL server installation and configuration to run database migrations:
- ## Install and setup MySQL server and database locally on your machine to test the DemoCredit server app
- ```
+
+## 4: Setup MySQL server installation and configuration to run database migrations:
+## Install and setup MySQL server and database locally on your machine to test the DemoCredit server app
+
  `npx knex migrate:latest`
- ```
+  Or
+  `npx knex migrate:latest --knexfile knexfile.js`
+
 
 
  ## 5 Start the Server to run the app using this command
@@ -78,7 +81,7 @@ KARMA_API_KEY=yourapikey
  ## Usage
 After setting up and running the server, you can interact with the API using tools like Postman or vscode REST Client extension. You can also integrate it with your front-end application or other services.
 
-# API Endpoints
+## API Endpoints
 ## User Management
 Description: Create a new user account.
 ```
@@ -120,7 +123,7 @@ content-type: application/json
 }
 ```
 
-# User account funding
+## User account funding
 ## Description: Fund a user account.
 ```
 POST `http://localhost:7000/users/1/fund`
@@ -153,7 +156,7 @@ content-type: application/json
 }
 ```
 
-# Transfer Fund to another existing user
+## Transfer Fund to another existing user
 ## Description: Transfer funds to another user.
 ```
 POST `http://localhost:7000/users/1/transfer`
@@ -224,10 +227,11 @@ content-type: application/json
 ```
 
 
-# Error Responses
+## Error Responses
 ## For error scenarios, the server returns appropriate HTTP status codes along with a descriptive message. For example:
 
 - 403 Forbidden: If a user is blacklisted during account creation.
 * 400 Bad Request: If there are insufficient funds during transfers or withdrawals and
 + 500  For internal Server Error.
++ And gracefully handled the rest errors for diffrent scenarios.
 

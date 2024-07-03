@@ -1,10 +1,10 @@
-import knex from '../src/db/knex';
+// import knex from '../src/db/knex';
 
-beforeAll(async () => {
-  await knex.migrate.latest();
-  await knex.seed.run();
-});
+// beforeAll(async () => {
+//   await knex.migrate.latest();
+//   await knex.seed.run();
+// });
 
-afterAll(async () => {
-  await knex.destroy();
-});
+// afterAll(async () => {
+//   await knex.destroy();
+// });

@@ -9,9 +9,25 @@ interface IKnexConfigProps {
 };
 
 //define database url configuration
-const databaseUrl = process.env.MYSQL_URL || `mysql://${process.env.MYSQLUSER}:${process.env.MYSQLPASSWORD}@${process.env.MYSQLHOST}:${process.env.MYSQLPORT}/${process.env.MYSQLDATABASE}`;
+const databaseUrl = process.env.MYSQL_URL ? process.env.MYSQL_URL : `mysql://${process.env.MYSQLUSER}:${process.env.MYSQLPASSWORD}@${process.env.MYSQLHOST}:${process.env.MYSQLPORT}/${process.env.MYSQLDATABASE}`;
 
 const knexConfig: IKnexConfigProps = {
+  production: {
+    client: 'mysql',
+    connection: databaseUrl || {
+      host: process.env.MYSQLHOST,
+      user: process.env.MYSQLUSER,
+      password: process.env.MYSQLPASSWORD,
+      database: process.env.MYSQLDATABASE,
+      port: process.env.MYSQLPORT ? Number(process.env.MYSQLPORT) : getEnvNumber('MYSQLPORT')
+    },
+  migrations: {
+    directory: './src/db/migrations',
+  },
+  seeds: {
+    directory: './src/db/seeds',
+  },
+},
   development: {
     client: 'mysql',
     connection: {
@@ -40,22 +56,6 @@ const knexConfig: IKnexConfigProps = {
     },
     seeds: {
       directory: './seeds',
-    },
-  },
-    production: {
-      client: 'mysql',
-      connection: databaseUrl || {
-        host: process.env.MYSQLHOST,
-        user: process.env.MYSQLUSER,
-        password: process.env.MYSQLPASSWORD,
-        database: process.env.MYSQLDATABASE,
-        port: process.env.MYSQLPORT ? Number(process.env.MYSQLPORT) : getEnvNumber('MYSQLPORT')
-      },
-    migrations: {
-      directory: './src/db/migrations',
-    },
-    seeds: {
-      directory: './src/db/seeds',
     },
   },
 };

@@ -16,7 +16,7 @@ exports.createUser = createUser;
 exports.fundAccount = fundAccount;
 exports.transferFunds = transferFunds;
 exports.withdrawFunds = withdrawFunds;
-const UserModel_1 = __importDefault(require("../models/UserModel"));
+const userModel_1 = __importDefault(require("../models/userModel"));
 const karmaService_1 = require("../services/karmaService");
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -43,7 +43,7 @@ function createUser(req, res) {
             if (!password)
                 throw new Error('Please choose a strong password for your account, autonumeric characters preferably!');
             // Check if user already exists
-            const existingUser = yield UserModel_1.default.findByEmail(email);
+            const existingUser = yield userModel_1.default.findByEmail(email);
             if (existingUser) {
                 return res.status(400).json({ message: 'User already exists' });
             }
@@ -66,7 +66,7 @@ function createUser(req, res) {
             // Encrypt or hash the new user's password
             const hashedPassword = yield bcryptjs.hash(password, 10);
             // Create new user
-            const newUserId = yield UserModel_1.default.create({
+            const newUserId = yield userModel_1.default.create({
                 first_name,
                 last_name,
                 email,
@@ -80,7 +80,7 @@ function createUser(req, res) {
             // Generate JWT token for the new user
             const userToken = jwt.sign({ userId: newUserId[0] }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 3600 });
             // Get the new user's data
-            const user = yield UserModel_1.default.getUser(newUserId[0]);
+            const user = yield userModel_1.default.getUser(newUserId[0]);
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
@@ -115,13 +115,13 @@ function fundAccount(req, res) {
             // inputs log for debugging
             console.log('fundAccount inputs:', { userIdNumber, amountNumber });
             // Check if user exists
-            const user = yield UserModel_1.default.findById(userIdNumber);
+            const user = yield userModel_1.default.findById(userIdNumber);
             if (!user)
                 return res.status(404).json({ message: 'User not found' });
             // Update user's balance
-            yield UserModel_1.default.updateBalance(userIdNumber, amountNumber);
+            yield userModel_1.default.updateBalance(userIdNumber, amountNumber);
             // Return updated user information
-            const updatedUser = yield UserModel_1.default.getUser(Number(userIdNumber));
+            const updatedUser = yield userModel_1.default.getUser(Number(userIdNumber));
             console.log('message:', 'Account funded successfully!', 'updatedUser:', updatedUser);
             return res.status(200).json({
                 message: 'Account funded successfully',
@@ -148,24 +148,24 @@ function transferFunds(req, res) {
             // Starting a transaction
             yield knex_1.default.transaction((trx) => __awaiter(this, void 0, void 0, function* () {
                 // Get sender details
-                const sender = yield UserModel_1.default.findById(Number(userId), trx);
+                const sender = yield userModel_1.default.findById(Number(userId), trx);
                 if (!sender || !sender.id)
                     return res.status(404).json({ message: 'Sender not found' });
                 // Check sender's balance
                 if (sender.balance < amount)
                     return res.status(400).json({ message: 'Sorry you\'re not permitted to carryout this transaction due to insufficient funds, Kindly fund your wallet first and try again!' });
                 // Get recipient details
-                const recipient = yield UserModel_1.default.findByEmail(recipientEmail, trx);
+                const recipient = yield userModel_1.default.findByEmail(recipientEmail, trx);
                 if (!recipient || !recipient.id)
                     return res.status(404).json({ message: 'Recipient not found' });
                 // Perform the fund transfer within the transaction
-                yield UserModel_1.default.updateBalance(sender.id, -amount, trx);
-                yield UserModel_1.default.updateBalance(recipient.id, amount, trx);
+                yield userModel_1.default.updateBalance(sender.id, -amount, trx);
+                yield userModel_1.default.updateBalance(recipient.id, amount, trx);
                 // Commit the transaction
                 yield trx.commit();
                 // Get updated user information
-                const updatedSender = yield UserModel_1.default.findById(sender.id);
-                const updatedRecipient = yield UserModel_1.default.findByEmail(recipientEmail);
+                const updatedSender = yield userModel_1.default.findById(sender.id);
+                const updatedRecipient = yield userModel_1.default.findByEmail(recipientEmail);
                 console.log('message:', 'Funds transferred successfully', 'amount:', amount, 'updatedSenderData:', updatedSender, 'updatedRecipientData:', updatedRecipient);
                 res.status(200).json({
                     message: 'Funds transferred successfully',
@@ -187,14 +187,14 @@ function withdrawFunds(req, res) {
         const { userId } = req.params;
         const { amount } = req.body;
         try {
-            const user = yield UserModel_1.default.findById(Number(userId));
+            const user = yield userModel_1.default.findById(Number(userId));
             if (!user)
                 return res.status(404).json({ message: 'User not found' });
             //check or confirm if the user has sufficient amount to withhed
             if (user.balance < amount)
                 return res.status(400).json({ message: 'Insufficient funds' });
             //debit the user's wallet/account with the amount
-            yield UserModel_1.default.updateBalance(user.id, -amount);
+            yield userModel_1.default.updateBalance(user.id, -amount);
             console.log('message:', 'Funds withdrawn successfully!', 'amount_withdrawn:', amount, 'updatedUserData:', user);
             return res.status(200).json({ message: 'Funds withdrawn successfully!', amount_withdrawn: amount, updatedUserData: user });
         }

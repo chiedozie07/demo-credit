@@ -1,4 +1,4 @@
-## *** App Name: DemoCredit ***
+## App Name: DemoCredit
 
 ### Brief Description: 
 Welcome to the DemoCredit, Chiedozie's Lendsqr backend engineer assessment V2 mobile lending app MVP version that requires wallet functionality. This is needed as borrowers need a wallet to receive the loans they have been granted and also send the money for repayments.
@@ -14,29 +14,29 @@ Indeed, is the backbone of our financial services that allows users to manage th
    
 ### Features 
 1. ## New User Creation
-- *** Description: *** This feature allows the creation of a new user by collecting all required information for DemoCredit onboarding.
-- *** Endpoint:v *** POST /createUser
-- *** Usage: *** Submit user details like name, email, phone number, and password to create a new account.
+- Description: This feature allows the creation of a new user by collecting all required information for DemoCredit onboarding.
+- Endpoint:v POST /createUser
+- Usage: Submit user details like name, email, phone number, and password to create a new account.
 
 2. Existing User Account Funding
-- *** Description: *** Enables users to fund their accounts after successful onboarding.
-- *** Endpoint: *** POST /fundAccount/:userId
-- *** Usage: *** Provide the user ID and the amount to be deposited to top up the user’s wallet.
+- Description: Enables users to fund their accounts after successful onboarding.
+- Endpoint: POST /fundAccount/:userId
+- Usage: Provide the user ID and the amount to be deposited to top up the user’s wallet.
 
 3. ### Funds Transfer
-- * ***Description:*** * Allows users to transfer funds from their DemoCredit wallet to another user.
-- ***Endpoint: POST /transferFunds/:userId
+- Description: Allows users to transfer funds from their DemoCredit wallet to another user.
+- Endpoint: POST /transferFunds/:userId
 - Usage: Specify the sender’s user ID, recipient’s email, and the transfer amount to move funds between accounts.
 
 4. ### Funds Withdrawal
-- *** Description: *** Enables users to withdraw funds from their DemoCredit wallet to their bank account.
-- *** Endpoint: *** POST /withdrawFunds/:userId
-- *** Usage: *** Enter the user ID and the amount to be withdrawn to transfer funds to the linked bank account.
+- Description: Enables users to withdraw funds from their DemoCredit wallet to their bank account.
+- Endpoint: POST /withdrawFunds/:userId
+- Usage: Enter the user ID and the amount to be withdrawn to transfer funds to the linked bank account.
    
 5. ## Blacklist Check
-- *** Description: *** Utilizes the Lendsqr Adjutor Karma API to prevent blacklisted users from engaging in transactions.
--  *** Endpoint: *** Integrated within user-related operations
-- *** Usage: *** Automatically checks user status against the blacklist during account creation and transactions to ensure compliance.
+- Description: Utilizes the Lendsqr Adjutor Karma API to prevent blacklisted users from engaging in transactions.
+- Endpoint: Integrated within user-related operations
+- Usage: Automatically checks user status against the blacklist during account creation and transactions to ensure compliance.
 
 ### Recomendation:
 Feel free to explore each feature and utilize the provided endpoints to manage your DemoCredit account efficiently. For more details on usage and sample requests, refer to the specific endpoints in this Postman collection.

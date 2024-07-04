@@ -1,5 +1,6 @@
-import { Knex } from 'knex';
 import dotenv from 'dotenv';
+
+import { Knex } from 'knex';
 import { getEnvNumber } from '../helpers/utils';
 import path from 'path';
 // import mysql from 'mysql2';
@@ -11,7 +12,7 @@ interface IKnexConfigProps {
 };
 
 // Define the database URL configuration
-const dbConnectionUrl = `mysql://${process.env.MYSQLUSER}:${process.env.MYSQLPASSWORD}@${process.env.MYSQLHOST}:${process.env.MYSQLPORT}/${process.env.MYSQLDATABASE}`;
+const dbConnectionUrl = `mysql://${process.env.MYSQLUSER}:${process.env.MYSQLPASSWORD}@${process.env.MYSQLHOST}:${process.env.MYSQLPORT}/${process.env.MYSQLDATABASE} || ${process.env.MYSQL_URL}`;
 // const mysqlPrivateConnection = `mysql://${process.env.MYSQLUSER}:${process.env.MYSQL_ROOT_PASSWORD}@${process.env.MYSQL_PRIVATE_HOST}:${process.env.MYSQL_PRIVATE_PORT}/${process.env.MYSQL_DATABASE}`;
 // const connectDB = mysql.createConnection(dbConnectionUrl);
 

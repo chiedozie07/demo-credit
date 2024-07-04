@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 import dotenv from 'dotenv';
 // import { getEnvNumber } from '../helpers/utils';
-// import mysql from 'mysql2';
+import mysql from 'mysql2';
 import path from 'path';
 
 

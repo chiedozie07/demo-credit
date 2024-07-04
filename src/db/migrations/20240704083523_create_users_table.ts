@@ -2,14 +2,14 @@ import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   // Drop the existing table if it exists (safety measure)
-  await knex.schema.dropTableIfExists('users');
-
+  // await knex.schema.dropTableIfExists('users');
+  
   // Create the new users table with correct schema
   await knex.schema.createTable('users', (table) => {
     table.increments('id').unique().primary();
     table.string('first_name').notNullable(); 
     table.string('last_name').notNullable();
-    table.string('phone').notNullable(); 
+    table.string('phone').unique().notNullable(); 
     table.string('account_no').unique().nullable(); 
     table.string('next_of_kind').notNullable(); 
     table.date('dob').notNullable(); 

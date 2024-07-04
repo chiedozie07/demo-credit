@@ -22,21 +22,20 @@ const urlDB = process.env.MYSQL_URL ? process.env.MYSQL_URL : `mysql://${process
 
 const knexConfig: IKnexConfigProps = {
   production: {
-    client: 'mysql2',
+    client: 'mysql',
     connection: urlDB || {
-      host: process.env.MYSQLHOST || '127.0.0.1',
+      host: process.env.MYSQLHOST,
       user: process.env.MYSQLUSER,
       password: process.env.MYSQLPASSWORD,
       database: process.env.MYSQLDATABASE,
-      port: parseInt(process.env.MYSQLPORT) || 3306,
-      // connectTimeout: 10000,
+      port: parseInt(process.env.MYSQLPORT),
     },
     migrations: {
       directory: path.resolve(__dirname, './src/db/migrations')
     },
   },
   development: {
-    client: "mysql2",
+    client: "mysql",
     connection: {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
@@ -48,7 +47,7 @@ const knexConfig: IKnexConfigProps = {
     }
   },
   test: {
-    client: 'mysql2',
+    client: 'mysql',
     connection: {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,

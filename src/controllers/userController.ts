@@ -123,6 +123,7 @@ export async function transferFunds(req: Request, res: Response) {
       // Get recipient details
       const recipient = await UserModel.findByEmail(recipientEmail, trx);
       if (!recipient || !recipient.id) return res.status(404).json({ message: 'Recipient not found' });
+      if(sender.id === recipient.id) return res.status(403).json({ message: 'Sorry, you\'re not permitted to carry out this transaction, a sender cannot be a recipient at thesame time.'});
       // Perform the fund transfer within the transaction
       await UserModel.updateBalance(sender.id, - amount, trx);
       await UserModel.updateBalance(recipient.id, amount, trx);

@@ -16,8 +16,8 @@ export async function createUser(req: Request, res: Response) {
   try {
     // Validate the user's input details
     if (!first_name || !last_name) throw new Error('Please ensure that your first and last name are correctly entered!');
-    if (!email || !email_regex.test(email)) throw new Error('Please enter a valid email');
-    if (!phone || !phone_regex.test(phone)) throw new Error('Please enter a valid phone number');
+    if (!email) throw new Error('Please enter a valid email');
+    if (!phone) throw new Error('Please enter a valid phone number');
     if (!next_of_kind) throw new Error('Kindly enter the valid full name of your next of kin');
     if (!dob) throw new Error('Please enter your date of birth in this format (DD/MM/YYYY)');
     if (!password) throw new Error('Please choose a strong password for your account, autonumeric characters preferably!');

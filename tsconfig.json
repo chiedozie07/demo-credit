@@ -11,9 +11,10 @@
     "paths": {
       "@controllers/*": ["src/controllers/*"],
       "@routes/*": ["src/routes/*"],
-      "@db/*": ["db/*"],
+      "@db/*": ["src/db/*"],
+      "@migrations/*": ["src/db/migrations/*"]
     },
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "tests/**/*.ts", "*.spec.ts", "README.md"],
+  "exclude": ["node_modules", "dist", "tests/**/*.ts", "*.spec.ts"],
 }

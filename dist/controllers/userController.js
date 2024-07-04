@@ -32,9 +32,9 @@ function createUser(req, res) {
             // Validate the user's input details
             if (!first_name || !last_name)
                 throw new Error('Please ensure that your first and last name are correctly entered!');
-            if (!email || !utils_1.email_regex.test(email))
+            if (!email)
                 throw new Error('Please enter a valid email');
-            if (!phone || !utils_1.phone_regex.test(phone))
+            if (!phone)
                 throw new Error('Please enter a valid phone number');
             if (!next_of_kind)
                 throw new Error('Kindly enter the valid full name of your next of kin');
@@ -158,6 +158,8 @@ function transferFunds(req, res) {
                 const recipient = yield userModel_1.default.findByEmail(recipientEmail, trx);
                 if (!recipient || !recipient.id)
                     return res.status(404).json({ message: 'Recipient not found' });
+                if (sender.id === recipient.id)
+                    return res.status(403).json({ message: 'Sorry, you\'re not permitted to carry out this transaction, a sender cannot be a recipient at thesame time.' });
                 // Perform the fund transfer within the transaction
                 yield userModel_1.default.updateBalance(sender.id, -amount, trx);
                 yield userModel_1.default.updateBalance(recipient.id, amount, trx);

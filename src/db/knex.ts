@@ -7,6 +7,8 @@ const knex = Knex(config);
 
 export default knex;
 
+
+
 // Replace mysql with mysql2
 // import mysql from 'mysql2';
 // import knexConfig from './knexfile';

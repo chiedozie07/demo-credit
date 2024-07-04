@@ -24,9 +24,9 @@ const connectDB = mysql.createConnection(urlDB);
 const knexConfig: IKnexConfigProps = {
   production: {
     client: 'mysql',
-    connection: mysqlPrivateConnection,
+    connection: urlDB,
     migrations: {
-      directory: path.resolve(__dirname, './src/db/migrations')
+      directory: './src/db/migrations'
     },
   },
   development: {

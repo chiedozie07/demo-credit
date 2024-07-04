@@ -16,7 +16,6 @@ const knexConfig: IKnexConfigProps = {
       user: process.env.MYSQLUSER,
       password: process.env.MYSQLPASSWORD,
       database: process.env.MYSQLDATABASE,
-      port: Number(process.env.MYSQLPORT) || 3306
     },
     migrations: {
       directory: path.resolve(__dirname, 'migrations')

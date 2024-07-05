@@ -40,13 +40,13 @@ const knexConfig: IKnexConfigProps = {
   },
   production: {
     client: 'mysql2',
-    connection: {
+    connection: dbUrl || {
         user: process.env.MYSQLUSER,
         password: process.env.MYSQLPASSWORD,
         host: process.env.MYSQLHOST,
         port: Number(process.env.MYSQLPORT),
         database: process.env.MYSQLDATABASE,
-    } || dbUrl,
+    },
     migrations: {
       directory: path.resolve(__dirname, './src/db/migrations')
     }

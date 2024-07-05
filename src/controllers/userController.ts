@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import UserModel from '../models/userModel';
 import { isUserBlacklisted } from '../services/karmaService';
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { email_regex, phone_regex, getRandom} from '../helpers/utils';
 import knex from '../db/knex';
 import dotenv from 'dotenv';
@@ -12,12 +12,13 @@ dotenv.config();
 
 // Create a new user account
 export async function createUser(req: Request, res: Response) {
+  console.log('POST Request Initiated For New User SignUp On:', req.route.path);
   const { first_name, last_name, email, password, phone, next_of_kind, dob } = req.body;
   try {
     // Validate the user's input details
     if (!first_name || !last_name) throw new Error('Please ensure that your first and last name are correctly entered!');
-    if (!email) throw new Error('Please enter a valid email');
-    if (!phone) throw new Error('Please enter a valid phone number');
+    if (!email_regex.test(email)) throw new Error('Please enter a valid email');
+    if (!phone_regex.test(phone)) throw new Error('Please enter a valid phone number');
     if (!next_of_kind) throw new Error('Kindly enter the valid full name of your next of kin');
     if (!dob) throw new Error('Please enter your date of birth in this format (DD/MM/YYYY)');
     if (!password) throw new Error('Please choose a strong password for your account, autonumeric characters preferably!');
@@ -76,6 +77,7 @@ export async function createUser(req: Request, res: Response) {
 
 // Fund user's account
 export async function fundAccount(req: Request, res: Response) {
+  console.log('POST Request Initiated Account Funding On:', req.route.path);
   const { userId } = req.params;
   const { amount } = req.body;
   try {
@@ -107,6 +109,7 @@ export async function fundAccount(req: Request, res: Response) {
 
 // Transfer funds, ensuring both the sender and recipient exist and the sender has enough balance.
 export async function transferFunds(req: Request, res: Response) {
+  console.log('POST Request Initiated For Transfer On:', req.route.path);
   const { userId } = req.params;
   const { recipientEmail, amount } = req.body;
   
@@ -143,6 +146,7 @@ export async function transferFunds(req: Request, res: Response) {
 
 //Withdraw Funds, ensure the user exists and has enough balance.
 export async function withdrawFunds(req: Request, res: Response) {
+  console.log('POST Request Initiated For Fund Withdrawal On:', req.route.path);
   const { userId } = req.params;
   const { amount } = req.body;
   try {

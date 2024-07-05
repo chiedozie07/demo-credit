@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // Endpoints/routes definition
 app.get('/', (_req: Request, res: Response) => {
-  console.log('GET Request Initiated On:', _req.route);
+  console.log('GET Request Initiated On:', _req.route.path);
   res.send('Welcome to Chiedozie\'s Lendsqr Backend Engineer Assessment V2 DemoCredit wallet server app!');
 });
 

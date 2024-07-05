@@ -18,8 +18,8 @@ exports.transferFunds = transferFunds;
 exports.withdrawFunds = withdrawFunds;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const karmaService_1 = require("../services/karmaService");
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const utils_1 = require("../helpers/utils");
 const knex_1 = __importDefault(require("../db/knex"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -32,9 +32,9 @@ function createUser(req, res) {
             // Validate the user's input details
             if (!first_name || !last_name)
                 throw new Error('Please ensure that your first and last name are correctly entered!');
-            if (!email)
+            if (!utils_1.email_regex.test(email))
                 throw new Error('Please enter a valid email');
-            if (!phone)
+            if (!utils_1.phone_regex.test(phone))
                 throw new Error('Please enter a valid phone number');
             if (!next_of_kind)
                 throw new Error('Kindly enter the valid full name of your next of kin');
@@ -64,7 +64,7 @@ function createUser(req, res) {
             // Convert the dob from DD/MM/YYYY format to MySQL date format (YYYY-MM-DD)
             const formattedDob = dob.split('/').reverse().join('-');
             // Encrypt or hash the new user's password
-            const hashedPassword = yield bcryptjs.hash(password, 10);
+            const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
             // Create new user
             const newUserId = yield userModel_1.default.create({
                 first_name,
@@ -78,7 +78,7 @@ function createUser(req, res) {
                 password: hashedPassword
             });
             // Generate JWT token for the new user
-            const userToken = jwt.sign({ userId: newUserId[0] }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 3600 });
+            const userToken = jsonwebtoken_1.default.sign({ userId: newUserId[0] }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 3600 });
             // Get the new user's data
             const user = yield userModel_1.default.getUser(newUserId[0]);
             if (!user) {

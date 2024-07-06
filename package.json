@@ -4,7 +4,7 @@
   "description": "Demo Credit is a mobile lending app that requires wallet functionality.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node -r tsconfig-paths/register dist/index.js",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
     "migrate": "ts-node ./src/db/migrations/knexfile.ts migrate:latest",

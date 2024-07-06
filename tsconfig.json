@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "src/dist",
+    "outDir": "dist/",
     "rootDir": "./src",
     "module": "CommonJS",
     "target": "ES6",
@@ -15,6 +15,6 @@
       "@models/*": ["src/models/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/dist", "tests/**/*.ts", "*.spec.ts"]
+  "include": ["src/**/*", "dist"],
+  "exclude": ["node_modules", "dist", "tests/**/*.ts", "*.spec.ts"]
 }

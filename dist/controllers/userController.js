@@ -27,6 +27,7 @@ dotenv_1.default.config();
 // Create a new user account
 function createUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('POST Request Initiated For New User SignUp On:', req.route.path);
         const { first_name, last_name, email, password, phone, next_of_kind, dob } = req.body;
         try {
             // Validate the user's input details
@@ -102,6 +103,7 @@ function createUser(req, res) {
 // Fund user's account
 function fundAccount(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('POST Request Initiated Account Funding On:', req.route.path);
         const { userId } = req.params;
         const { amount } = req.body;
         try {
@@ -139,6 +141,7 @@ function fundAccount(req, res) {
 // Transfer funds, ensuring both the sender and recipient exist and the sender has enough balance.
 function transferFunds(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('POST Request Initiated For Transfer On:', req.route.path);
         const { userId } = req.params;
         const { recipientEmail, amount } = req.body;
         // Validate input
@@ -182,6 +185,7 @@ function transferFunds(req, res) {
 //Withdraw Funds, ensure the user exists and has enough balance.
 function withdrawFunds(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('POST Request Initiated For Fund Withdrawal On:', req.route.path);
         const { userId } = req.params;
         const { amount } = req.body;
         try {

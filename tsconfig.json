@@ -1,20 +1,20 @@
 {
   "compilerOptions": {
-    "outDir": "src/dist",
+    "outDir": "./dist",
     "rootDir": "./src",
     "module": "CommonJS",
     "target": "ES6",
     "esModuleInterop": true,
     "strict": false,
     "skipLibCheck": true,
-    "baseUrl": ".", 
+    "baseUrl": ".",
     "paths": {
       "@controllers/*": ["src/controllers/*"],
       "@routes/*": ["src/routes/*"],
       "@db/*": ["src/db/*"],
-      "@migrations/*": ["src/db/migrations/*"]
+      "@models/*": ["src/models/*"]
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/dist", "tests/**/*.ts", "*.spec.ts"]
+  "exclude": ["node_modules", "dist", "tests/**/*.ts", "*.spec.ts"]
 }

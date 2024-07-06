@@ -22,7 +22,7 @@ const knexConfig: IKnexConfigProps = {
         port: Number(process.env.DB_PORT)
     },
     migrations: {
-      directory: path.resolve(__dirname, './src/db/migrations')
+      directory: path.resolve(__dirname, 'src/db/migrations')
     }
   },
   staging: {
@@ -35,20 +35,20 @@ const knexConfig: IKnexConfigProps = {
         port: Number(process.env.DB_PORT) || 3306
     },
     migrations: {
-      directory: path.resolve(__dirname, './src/db/migrations')
+      directory: path.resolve(__dirname, 'src/db/migrations')
     }
   },
   production: {
     client: 'mysql2',
-    connection: dbUrl || {
+    connection: {
         user: process.env.MYSQLUSER,
         password: process.env.MYSQLPASSWORD,
         host: process.env.MYSQLHOST,
         port: Number(process.env.MYSQLPORT),
         database: process.env.MYSQLDATABASE,
-    },
+    } || dbUrl,
     migrations: {
-      directory: path.resolve(__dirname, './src/db/migrations')
+      directory: path.resolve(__dirname, 'src/db/migrations')
     }
   },
 

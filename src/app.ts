@@ -2,12 +2,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express, { Request, Response, NextFunction } from 'express';
-import http from 'http';
-import socketio from 'socket.io';
 import morgan from 'morgan';
 import cors from 'cors';
-
+import socketio from 'socket.io';
+import http from 'http';
 import usersTransactionApiRoutes from './routes/api/userRoutes';
+
 
 const app = express();
 // CORS options definition
@@ -38,7 +38,6 @@ app.get('/', (_req: Request, res: Response) => {
   console.log('GET Request Initiated On:', _req.route.path);
   res.send('Welcome to Chiedozie\'s Lendsqr Backend Engineer Assessment V2 DemoCredit wallet server app!');
 });
-
 app.use(usersTransactionApiRoutes);
 
 // Handle errors gracefully

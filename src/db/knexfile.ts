@@ -32,7 +32,8 @@ const knexConfig: IKnexConfigProps = {
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
-        port: Number(process.env.DB_PORT) || 3306
+        port: Number(process.env.DB_PORT) || 3306,
+        connectTimeout: 10000
     },
     migrations: {
       directory: path.resolve(__dirname, 'src/db/migrations')
@@ -53,4 +54,5 @@ const knexConfig: IKnexConfigProps = {
   },
 
 };
+
 export default knexConfig;

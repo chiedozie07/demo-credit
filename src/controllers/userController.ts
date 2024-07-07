@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import UserModel from '../models/userModel';
+import UserModel, { IUserProps } from '../models/userModel';
 import { isUserBlacklisted } from '../services/karmaService';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -11,15 +11,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Create a new user account
-export async function createUser(req: Request, res: Response) {
+export const createUser = async(req: Request, res: Response): Promise<Response> => {
   console.log('POST Request Initiated For New User SignUp On:', req.route.path);
-  const { first_name, last_name, email, password, phone, next_of_kind, dob } = req.body;
+  const { first_name, last_name, email, password, phone, next_of_kin, dob } = req.body;
   try {
     // Validate the user's input details
     if (!first_name || !last_name) throw new Error('Please ensure that your first and last name are correctly entered!');
     if (!email_regex.test(email)) throw new Error('Please enter a valid email');
     if (!phone_regex.test(phone)) throw new Error('Please enter a valid phone number');
-    if (!next_of_kind) throw new Error('Kindly enter the valid full name of your next of kin');
+    if (!next_of_kin) throw new Error('Kindly enter the valid full name of your next of kin');
     if (!dob) throw new Error('Please enter your date of birth in this format (DD/MM/YYYY)');
     if (!password) throw new Error('Please choose a strong password for your account, autonumeric characters preferably!');
 
@@ -50,7 +50,7 @@ export async function createUser(req: Request, res: Response) {
       last_name,
       email,
       phone,
-      next_of_kind,
+      next_of_kin,
       dob: formattedDob,
       account_no: getRandom(10),
       balance: 0,
@@ -76,10 +76,10 @@ export async function createUser(req: Request, res: Response) {
 };
 
 // Fund user's account
-export async function fundAccount(req: Request, res: Response) {
-  console.log('POST Request Initiated Account Funding On:', req.route.path);
+export const fundAccount = async(req: Request, res: Response): Promise<Response> =>{
   const { userId } = req.params;
   const { amount } = req.body;
+  console.log(`POST Request Initiated For ${userId} User\'s Account Funding On:`, req.route.path);
   try {
     // Validate input
     const userIdNumber = parseInt(userId, 10);
@@ -102,17 +102,16 @@ export async function fundAccount(req: Request, res: Response) {
       userData: updatedUser,
     });
   } catch (error) {
-    console.error('Error funding user\'s account:', error);
-    return res.status(500).json({ message: 'Internal server error during user\'s account funding' });
+    console.error(`An error occured for ${userId} user\'s account funding:`, error);
+    return res.status(500).json({ message: 'Internal server error!' });
   }
 };
 
 // Transfer funds, ensuring both the sender and recipient exist and the sender has enough balance.
-export async function transferFunds(req: Request, res: Response) {
-  console.log('POST Request Initiated For Transfer On:', req.route.path);
+export const transferFunds = async(req: Request, res: Response): Promise<Response> => {
   const { userId } = req.params;
   const { recipientEmail, amount } = req.body;
-  
+  console.log(`POST Request Initiated For ${userId} User\'s Transfer On:`, req.route.path);
   // Validate input
   if (!userId || !recipientEmail || !amount || isNaN(amount) || amount <= 0) return res.status(400).json({ message: 'Invalid input data' });
   try {
@@ -140,15 +139,15 @@ export async function transferFunds(req: Request, res: Response) {
     });
   } catch (error) {
     console.error('Error transferring fund:', error);
-    return res.status(500).json({ message: 'Internal server error (Fund transfer)' });
+    return res.status(500).json({ message: 'Internal server error!' });
   }
 };
 
 //Withdraw Funds, ensure the user exists and has enough balance.
-export async function withdrawFunds(req: Request, res: Response) {
-  console.log('POST Request Initiated For Fund Withdrawal On:', req.route.path);
+export const withdrawFunds = async(req: Request, res: Response): Promise<Response> => {
   const { userId } = req.params;
   const { amount } = req.body;
+  console.log(`POST Request Initiated For ${userId} User\'s Fund Withdrawal On:`, req.route.path);
   try {
     const user = await UserModel.findById(Number(userId));
     if (!user) return res.status(404).json({ message: 'User not found' });
@@ -160,7 +159,35 @@ export async function withdrawFunds(req: Request, res: Response) {
     return res.status(200).json({ message: 'Funds withdrawn successfully!', amount_withdrawn: amount, updatedUserData: user });
   } catch (error) {
     console.error('Error Withdrawing fund:', error);
-    return res.status(500).json({ message: 'Internal server error(Fund withdrawal)' });
+    return res.status(500).json({ message: 'Internal server error!' });
   };
 };
 
+// Get individual user
+export const getUser = async (req: Request, res: Response): Promise<Response> => {
+  console.log('GET Request For User Data Initiated On:', req.route.path);
+  const { userId } = req.params;
+  try {
+    const id = parseInt(userId, 10);
+    if (isNaN(id)) return res.status(400).json({ message: 'Invalid user ID format' });
+    const user: IUserProps | null = await UserModel.findById(id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// Get all users
+export const getUsers = async (req: Request, res: Response): Promise<Response> => {
+  console.log('GET Request For User\'s Meta Data Initiated On:', req.route.path);
+  try {
+      const users: IUserProps[] = await UserModel.getUsers();
+      if (users.length === 0) return res.status(404).json({ message: 'No users found. Please create a user and try again.' });
+      return res.status(200).json({message: 'Successfully retrieved all users\'s data!', usersMeta: users});
+  } catch (error) {
+      console.error('Error fetching users:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+  }
+};

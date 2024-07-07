@@ -11,4 +11,6 @@ router.post('/users', userController_1.createUser);
 router.post('/users/:userId/fund', userController_1.fundAccount);
 router.post('/users/:userId/transfer', userController_1.transferFunds);
 router.post('/users/:userId/withdraw', userController_1.withdrawFunds);
+router.get('/users/:userId', userController_1.getUser);
+router.get('/users', userController_1.getUsers);
 exports.default = router;

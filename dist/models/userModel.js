@@ -24,19 +24,21 @@ class UserModel {
             return (0, knex_1.default)(this.tableName).insert(user);
         });
     }
+    ;
     // Exclude password when fetching by ID
     findById(id, trx) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = trx ? trx(this.tableName) : (0, knex_1.default)(this.tableName);
-            return query.select('id', 'first_name', 'last_name', 'email', 'phone', 'next_of_kind', 'dob', 'account_no', 'balance', 'created_at', 'updated_at')
+            return query.select('id', 'first_name', 'last_name', 'email', 'phone', 'next_of_kin', 'dob', 'account_no', 'balance', 'created_at', 'updated_at')
                 .where({ id }).first();
         });
     }
+    ;
     // Exclude password when fetching by email
     findByEmail(email, trx) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = trx ? trx(this.tableName) : (0, knex_1.default)(this.tableName);
-            return query.select('id', 'first_name', 'last_name', 'email', 'phone', 'next_of_kind', 'dob', 'account_no', 'balance', 'created_at', 'updated_at')
+            return query.select('id', 'first_name', 'last_name', 'email', 'phone', 'next_of_kin', 'dob', 'account_no', 'balance', 'created_at', 'updated_at')
                 .where({ email }).first();
         });
     }
@@ -57,17 +59,20 @@ class UserModel {
     getUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             return (0, knex_1.default)(this.tableName)
-                .select('id', 'first_name', 'last_name', 'email', 'phone', 'account_no', 'next_of_kind', 'dob', 'balance', 'created_at', 'updated_at');
+                .select('id', 'first_name', 'last_name', 'email', 'phone', 'account_no', 'next_of_kin', 'dob', 'balance', 'created_at', 'updated_at');
         });
     }
+    ;
     // Get a user by ID excluding password
     getUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return (0, knex_1.default)(this.tableName)
                 .where({ id })
-                .select('id', 'first_name', 'last_name', 'email', 'phone', 'account_no', 'next_of_kind', 'dob', 'balance', 'created_at', 'updated_at')
+                .select('id', 'first_name', 'last_name', 'email', 'phone', 'account_no', 'next_of_kin', 'dob', 'balance', 'created_at', 'updated_at')
                 .first();
         });
     }
+    ;
 }
+;
 exports.default = new UserModel();

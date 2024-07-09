@@ -13,7 +13,8 @@ dotenv.config();
 // Create a new user account
 export const createUser = async(req: Request, res: Response): Promise<Response> => {
   console.log('POST Request Initiated For New User SignUp On:', req.route.path);
-  const { first_name, last_name, email, password, phone, next_of_kin, dob } = req.body;
+  const { first_name, last_name, email, phone, password, next_of_kin, dob } = req.body;
+
   try {
     // Validate the user's input details
     if (!first_name || !last_name) throw new Error('Please ensure that your first and last name are correctly entered!');
@@ -25,9 +26,10 @@ export const createUser = async(req: Request, res: Response): Promise<Response> 
 
     // Check if user already exists
     const existingUser = await UserModel.findByEmail(email);
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
+    if (existingUser) return res.status(400).json({ message: 'User already exists' });
+    const phoneExist = await UserModel.isPhoneExist(phone);
+    console.log('isPhoneExist', phoneExist);
+    if(phoneExist) return res.status(400).json({ message: 'Phone already exists, kindly enter your valid phone number' });
     // Check if there's any blacklisted user with this email 
     console.log(`Checking if user with ${email} email is blacklisted...`);
     isUserBlacklisted(email)
@@ -85,7 +87,7 @@ export const fundAccount = async(req: Request, res: Response): Promise<Response>
     const userIdNumber = parseInt(userId, 10);
     const amountNumber = Number(amount);
     if (isNaN(userIdNumber) || userIdNumber <= 0) return res.status(400).json({ message: 'Invalid userId. It must be a positive number.' });
-    if (isNaN(amountNumber) || amountNumber <= 0) return res.status(400).json({ message: 'Invalid amount. It must be a positive number.' });
+    if (amountNumber <= 0) return res.status(400).json({ message: 'Invalid amount. It must be a positive number.' });
     // inputs log for debugging
     console.log('fundAccount inputs:', { userIdNumber, amountNumber });
     // Check if user exists
@@ -155,8 +157,9 @@ export const withdrawFunds = async(req: Request, res: Response): Promise<Respons
     if (user.balance < amount) return res.status(400).json({ message: 'Insufficient funds' });
     //debit the user's wallet/account with the amount
     await UserModel.updateBalance(user.id!, - amount);
-    console.log( 'message:', 'Funds withdrawn successfully!', 'amount_withdrawn:', amount, 'updatedUserData:', user);
-    return res.status(200).json({ message: 'Funds withdrawn successfully!', amount_withdrawn: amount, updatedUserData: user });
+    const updatedUserData = await UserModel.findById(Number(userId));
+    console.log( 'message:', 'Funds withdrawn successfully!', 'amount_withdrawn:', amount, updatedUserData);
+    return res.status(200).json({ message: 'Funds withdrawn successfully!', amount_withdrawn: amount, updatedUserData });
   } catch (error) {
     console.error('Error Withdrawing fund:', error);
     return res.status(500).json({ message: 'Internal server error!' });

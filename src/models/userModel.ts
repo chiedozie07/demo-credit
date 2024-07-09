@@ -40,6 +40,23 @@ public async findByEmail(email: string, trx?: any): Promise<IUserProps | undefin
     .where({ email }).first();
 };
 
+// Check if user's phone exist
+public async isPhoneExist(phone: number): Promise<IUserProps[] | boolean> {
+  if (!phone) {
+    console.error('Phone number is required, but was not provided.');
+    throw new Error('Phone number is required');
+  };
+  try {
+    const query = knex(this.tableName);
+    const usersPhone = await query.select('phone');
+    const isPhoneExist = usersPhone.some(user => user.phone === phone);
+    return isPhoneExist;
+  } catch (error) {
+    console.error('Error executing query:', error);
+    throw error;
+  };
+};
+
 //update the user's account balance with the amount
 public async updateBalance(id: number, amount: number, trx?: any): Promise<void> {
   const query = trx ? trx(this.tableName) : knex(this.tableName);

@@ -18,7 +18,9 @@ export async function up(knex: Knex): Promise<void> {
     table.decimal('balance').defaultTo(0); 
     table.timestamp('created_at').defaultTo(knex.fn.now()); 
     table.timestamp('updated_at').defaultTo(knex.fn.now());
-    table.string('token', 255).nullable(); 
+    table.boolean('logged_in').defaultTo(false);
+    table.string('user_token', 255).nullable(); 
+    table.datetime('token_expiration').nullable(); 
     table.timestamps(true, true); 
   });
 };

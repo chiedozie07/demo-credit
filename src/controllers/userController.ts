@@ -56,7 +56,10 @@ export const createUser = async(req: Request, res: Response): Promise<Response> 
       dob: formattedDob,
       account_no: getRandom(10),
       balance: 0,
-      password: hashedPassword
+      logged_in: false,
+      password: hashedPassword,
+      user_token: null,
+      token_expiration: null
     });
     // Generate JWT token for the new user
     const userToken = jwt.sign({ userId: newUserId[0] }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 3600 });
@@ -65,11 +68,11 @@ export const createUser = async(req: Request, res: Response): Promise<Response> 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     };
-    console.log('NEW USER CREATED ==>', 'message:', 'User created successfully', user, 'token:', userToken);
+    console.log('NEW USER CREATED ==>', 'message:', 'User created successfully', user, 'user_token:', userToken);
     return res.status(201).json({
       message: 'User created successfully',
       userData: user,
-      token: userToken
+      user_token: userToken
     });
   } catch (error: any) {
     console.error('Error creating user:', error);
@@ -97,11 +100,13 @@ export const fundAccount = async(req: Request, res: Response): Promise<Response>
     await UserModel.updateBalance(userIdNumber, amountNumber);
     // Return updated user information
     const updatedUser = await UserModel.getUser(Number(userIdNumber));
-    console.log('message:', 'Account funded successfully!', 'updatedUser:', updatedUser)
+    console.log('message:', 'Account funded successfully!', 
+    'updatedUserData:', {id: updatedUser.id, balance: updatedUser.balance, updated_at: updatedUser.updated_at}
+    );
     return res.status(200).json({
       message: 'Account funded successfully',
       amout_funded: amountNumber,
-      userData: updatedUser,
+      updatedUserData: {id: updatedUser.id, balance: updatedUser.balance, updated_at: updatedUser.updated_at},
     });
   } catch (error) {
     console.error(`An error occured for ${userId} user\'s account funding:`, error);
@@ -136,8 +141,14 @@ export const transferFunds = async(req: Request, res: Response): Promise<Respons
       // Get updated user information
       const updatedSender = await UserModel.findById(sender.id);
       const updatedRecipient = await UserModel.findByEmail(recipientEmail);
-      res.status(200).json({ message: 'Funds transferred successfully', amount_transfered: amount, updatedSenderData: updatedSender});
-      console.log('message:', 'Funds transferred successfully', 'amount:', amount, 'updatedSenderData:', updatedSender, 'updatedRecipientData:', updatedRecipient);
+      console.log('message:', 'Funds transferred successfully', 
+      'amount:', amount, 
+      'updatedSenderData:', {id: updatedSender.id, balance: updatedSender.balance, updated_at: updatedSender.updated_at}, 
+      'updatedRecipientData:', {id: updatedRecipient.id, balance: updatedRecipient.balance, updated_at: updatedRecipient.updated_at});
+      return res.status(200).json({ message: 'Funds transferred successfully', 
+      amount_transfered: amount, 
+      updatedSenderData: {id: updatedSender.id, balance: updatedSender.balance, updated_at: updatedSender.updated_at}
+      });
     });
   } catch (error) {
     console.error('Error transferring fund:', error);
@@ -158,8 +169,13 @@ export const withdrawFunds = async(req: Request, res: Response): Promise<Respons
     //debit the user's wallet/account with the amount
     await UserModel.updateBalance(user.id!, - amount);
     const updatedUserData = await UserModel.findById(Number(userId));
-    console.log( 'message:', 'Funds withdrawn successfully!', 'amount_withdrawn:', amount, updatedUserData);
-    return res.status(200).json({ message: 'Funds withdrawn successfully!', amount_withdrawn: amount, updatedUserData });
+    console.log( 'message:', 'Funds withdrawn successfully!', 'amount_withdrawn:', amount, 'updatedUserData:', 
+    {id: updatedUserData.id, balance: updatedUserData.balance, updated_at: updatedUserData.updated_at}
+  );
+    return res.status(200).json({ message: 'Funds withdrawn successfully!', 
+    amount_withdrawn: amount, 
+    updatedUserData: {id: updatedUserData.id, balance: updatedUserData.balance, updated_at: updatedUserData.updated_at} 
+    });
   } catch (error) {
     console.error('Error Withdrawing fund:', error);
     return res.status(500).json({ message: 'Internal server error!' });

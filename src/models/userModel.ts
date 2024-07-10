@@ -13,9 +13,11 @@ export interface IUserProps {
   balance: number;
   next_of_kin: string;
   dob: string;
+  logged_in?: boolean;
   created_at?: Date;
   updated_at?: Date;
-  token?: string;
+  user_token?: string;
+  token_expiration?: Date | number;
 };
 
 // Create a new user model and transaction methods
@@ -41,7 +43,7 @@ public async findByEmail(email: string, trx?: any): Promise<IUserProps | undefin
 };
 
 // Check if user's phone exist
-public async isPhoneExist(phone: number): Promise<IUserProps[] | boolean> {
+public async isPhoneExist(phone: string): Promise<IUserProps[] | boolean> {
   if (!phone) {
     console.error('Phone number is required, but was not provided.');
     throw new Error('Phone number is required');

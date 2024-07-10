@@ -43,6 +43,28 @@ class UserModel {
         });
     }
     ;
+    // Check if user's phone exist
+    isPhoneExist(phone) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!phone) {
+                console.error('Phone number is required, but was not provided.');
+                throw new Error('Phone number is required');
+            }
+            ;
+            try {
+                const query = (0, knex_1.default)(this.tableName);
+                const usersPhone = yield query.select('phone');
+                const isPhoneExist = usersPhone.some(user => user.phone === phone);
+                return isPhoneExist;
+            }
+            catch (error) {
+                console.error('Error executing query:', error);
+                throw error;
+            }
+            ;
+        });
+    }
+    ;
     //update the user's account balance with the amount
     updateBalance(id, amount, trx) {
         return __awaiter(this, void 0, void 0, function* () {

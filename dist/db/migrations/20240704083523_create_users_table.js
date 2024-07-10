@@ -20,7 +20,7 @@ function up(knex) {
             table.increments('id').unique().primary();
             table.string('first_name').notNullable();
             table.string('last_name').notNullable();
-            table.string('phone').unique().notNullable();
+            table.string('phone').notNullable();
             table.string('account_no').unique().nullable();
             table.string('next_of_kin').notNullable();
             table.date('dob').notNullable();
@@ -29,7 +29,9 @@ function up(knex) {
             table.decimal('balance').defaultTo(0);
             table.timestamp('created_at').defaultTo(knex.fn.now());
             table.timestamp('updated_at').defaultTo(knex.fn.now());
-            table.string('token', 255).nullable();
+            table.boolean('logged_in').defaultTo(false);
+            table.string('user_token', 255).nullable();
+            table.datetime('token_expiration').nullable();
             table.timestamps(true, true);
         });
     });

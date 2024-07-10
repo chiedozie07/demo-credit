@@ -11,6 +11,7 @@ Indeed, is the backbone of our financial services that allows users to manage th
 4. [Contact](#contact)
 5. [Usage](#usage)
 6. [Installation](#installation)
+7. [Database design](#dbDisign E-R Diagram and link)
    
 ### Features 
 1. ## New User Creation
@@ -77,7 +78,7 @@ npm install
 ```
 
 ### 3: Set Up Environment Variables:
-```
+```env
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=yourpassword
@@ -93,7 +94,7 @@ KARMA_API_KEY=yourapikey
  ```
   Or
   ```
-  `npx knex migrate:latest --knexfile knexfile.js`
+  `npx knex migrate:latest --knexfile knexfile.ts`
    ```
 
 
@@ -108,21 +109,21 @@ After setting up and running the server, you can interact with the API using too
 
 ### API Endpoints
 ### User Management
-Description: Create a new user account.
+Description: New user account creation/signup.
 ```
 POST `http://localhost:7000/users`
 content-type: application/json
 ```
 
 ### Request Body:
-``` 
+```json
 {
     "first_name": "Chiedozie",
     "last_name": "Lawrence",
     "email": "chiedozielawrence1@example.com",
     "phone": "08030000000",
-    "next_of_kind": "Dozie Lawrence",
-    "dob": "07/11/1995",
+    "next_of_kind": "Future Wife",
+    "dob": "20/12/1960",
     "password": "passW123"
 }
 ```
@@ -144,7 +145,7 @@ content-type: application/json
     "created_at": "2024-06-28T17:23:26.000Z",
     "updated_at": "2024-06-30T08:05:29.000Z"
   },
-  token: "tyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.IVGzmxrXFlmokr"
+  "user_token": "tyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.IVGzmxrXFlmokr"
 }
 ```
 
@@ -155,7 +156,8 @@ POST `http://localhost:7000/users/1/fund`
 content-type: application/json
 ```
 ### Request Body:
-```{
+```json
+{
   "amount": 5000
 }
 ```
@@ -165,17 +167,9 @@ content-type: application/json
 {
   "message": "Account funded successfully",
   "amout_funded": 5000,
-  "userData": {
+  "updatedUserData": {
     "id": 1,
-    "first_name": "Chiedozie",
-    "last_name": "Lawrence",
-    "email": "chiedozielawrence1@example.com",
-    "phone": "08030000000",
-    "account_no": 8053835011,
-    "next_of_kind": "Future Wife",
-    "dob": "1960-12-19T23:00:00.000Z",
     "balance": 5000.00,
-    "created_at": "2024-06-28T17:23:26.000Z",
     "updated_at": "2024-06-30T08:05:29.000Z"
   }
 }
@@ -189,7 +183,7 @@ content-type: application/json
 ```
 
 ### Request Body:
-```
+```json
 {
   "recipientEmail": "username2@example.com",
   "amount": 2150
@@ -203,15 +197,7 @@ content-type: application/json
   "amount_transfered": 2150,
   "updatedSenderData": {
     "id": 1,
-    "first_name": "Chiedozie",
-    "last_name": "Lawrence",
-    "email": "chiedozielawrence1@example.com",
-    "phone": "08030000000",
-    "next_of_kind": "Future Wife",
-    "dob": "1960-12-19T23:00:00.000Z",
-    "account_no": 8053835011,
     "balance": 2850.00,
-    "created_at": "2024-06-28T17:23:26.000Z",
     "updated_at": "2024-06-30T13:23:03.000Z"
   }
 }
@@ -237,20 +223,11 @@ content-type: application/json
   "amount_withdrawn": 2500,
   "updatedUserData": {
     "id": 1,
-    "first_name": "Chiedozie",
-    "last_name": "Lawrence",
-    "email": "chiedozielawrence1@example.com",
-    "phone": "08030000000",
-    "next_of_kind": "Future Wife",
-    "dob": "1960-12-19T23:00:00.000Z",
-    "account_no": 8053835011,
     "balance": 350.00,
-    "created_at": "2024-06-28T17:23:26.000Z",
     "updated_at": "2024-06-30T13:23:03.000Z"
   }
 }
 ```
-
 
 ### Error Responses
 ### For error scenarios, the server returns appropriate HTTP status codes along with a descriptive message. For example:
@@ -259,4 +236,10 @@ content-type: application/json
 * 400 Bad Request: If there are insufficient funds during transfers or withdrawals and
 + 500  For internal Server Error.
 + And gracefully handled the rest errors for diffrent scenarios.
+
+
+### DemoCredit Database Design E-R Diagram Link
+* Link: ***[dbDesigner Diagram](https://dbdesigner.page.link/Bc8UMtS5AC7XywUG8)***
+  
+  ![Database Design Diagram](images/demo-credit-db.png)
 

@@ -24,7 +24,7 @@ dotenv_1.default.config();
 // Create a new user account
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('POST Request Initiated For New User SignUp On:', req.route.path);
-    const { first_name, last_name, email, password, phone, next_of_kin, dob } = req.body;
+    const { first_name, last_name, email, phone, password, next_of_kin, dob } = req.body;
     try {
         // Validate the user's input details
         if (!first_name || !last_name)
@@ -41,9 +41,12 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             throw new Error('Please choose a strong password for your account, autonumeric characters preferably!');
         // Check if user already exists
         const existingUser = yield userModel_1.default.findByEmail(email);
-        if (existingUser) {
+        if (existingUser)
             return res.status(400).json({ message: 'User already exists' });
-        }
+        const phoneExist = yield userModel_1.default.isPhoneExist(phone);
+        console.log('isPhoneExist', phoneExist);
+        if (phoneExist)
+            return res.status(400).json({ message: 'Phone already exists, kindly enter your valid phone number' });
         // Check if there's any blacklisted user with this email 
         console.log(`Checking if user with ${email} email is blacklisted...`);
         (0, karmaService_1.isUserBlacklisted)(email)
@@ -72,7 +75,10 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             dob: formattedDob,
             account_no: (0, utils_1.getRandom)(10),
             balance: 0,
-            password: hashedPassword
+            logged_in: false,
+            password: hashedPassword,
+            user_token: null,
+            token_expiration: null
         });
         // Generate JWT token for the new user
         const userToken = jsonwebtoken_1.default.sign({ userId: newUserId[0] }, process.env.ACCESS_TOKEN_KEY, { expiresIn: 3600 });
@@ -82,11 +88,11 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             return res.status(404).json({ message: 'User not found' });
         }
         ;
-        console.log('NEW USER CREATED ==>', 'message:', 'User created successfully', user, 'token:', userToken);
+        console.log('NEW USER CREATED ==>', 'message:', 'User created successfully', user, 'user_token:', userToken);
         return res.status(201).json({
             message: 'User created successfully',
             userData: user,
-            token: userToken
+            user_token: userToken
         });
     }
     catch (error) {
@@ -106,7 +112,7 @@ const fundAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const amountNumber = Number(amount);
         if (isNaN(userIdNumber) || userIdNumber <= 0)
             return res.status(400).json({ message: 'Invalid userId. It must be a positive number.' });
-        if (isNaN(amountNumber) || amountNumber <= 0)
+        if (amountNumber <= 0)
             return res.status(400).json({ message: 'Invalid amount. It must be a positive number.' });
         // inputs log for debugging
         console.log('fundAccount inputs:', { userIdNumber, amountNumber });
@@ -118,11 +124,11 @@ const fundAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         yield userModel_1.default.updateBalance(userIdNumber, amountNumber);
         // Return updated user information
         const updatedUser = yield userModel_1.default.getUser(Number(userIdNumber));
-        console.log('message:', 'Account funded successfully!', 'updatedUser:', updatedUser);
+        console.log('message:', 'Account funded successfully!', 'updatedUserData:', { id: updatedUser.id, balance: updatedUser.balance, updated_at: updatedUser.updated_at });
         return res.status(200).json({
             message: 'Account funded successfully',
             amout_funded: amountNumber,
-            userData: updatedUser,
+            updatedUserData: { id: updatedUser.id, balance: updatedUser.balance, updated_at: updatedUser.updated_at },
         });
     }
     catch (error) {
@@ -163,8 +169,11 @@ const transferFunds = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             // Get updated user information
             const updatedSender = yield userModel_1.default.findById(sender.id);
             const updatedRecipient = yield userModel_1.default.findByEmail(recipientEmail);
-            res.status(200).json({ message: 'Funds transferred successfully', amount_transfered: amount, updatedSenderData: updatedSender });
-            console.log('message:', 'Funds transferred successfully', 'amount:', amount, 'updatedSenderData:', updatedSender, 'updatedRecipientData:', updatedRecipient);
+            console.log('message:', 'Funds transferred successfully', 'amount:', amount, 'updatedSenderData:', { id: updatedSender.id, balance: updatedSender.balance, updated_at: updatedSender.updated_at }, 'updatedRecipientData:', { id: updatedRecipient.id, balance: updatedRecipient.balance, updated_at: updatedRecipient.updated_at });
+            return res.status(200).json({ message: 'Funds transferred successfully',
+                amount_transfered: amount,
+                updatedSenderData: { id: updatedSender.id, balance: updatedSender.balance, updated_at: updatedSender.updated_at }
+            });
         }));
     }
     catch (error) {
@@ -187,8 +196,12 @@ const withdrawFunds = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             return res.status(400).json({ message: 'Insufficient funds' });
         //debit the user's wallet/account with the amount
         yield userModel_1.default.updateBalance(user.id, -amount);
-        console.log('message:', 'Funds withdrawn successfully!', 'amount_withdrawn:', amount, 'updatedUserData:', user);
-        return res.status(200).json({ message: 'Funds withdrawn successfully!', amount_withdrawn: amount, updatedUserData: user });
+        const updatedUserData = yield userModel_1.default.findById(Number(userId));
+        console.log('message:', 'Funds withdrawn successfully!', 'amount_withdrawn:', amount, 'updatedUserData:', { id: updatedUserData.id, balance: updatedUserData.balance, updated_at: updatedUserData.updated_at });
+        return res.status(200).json({ message: 'Funds withdrawn successfully!',
+            amount_withdrawn: amount,
+            updatedUserData: { id: updatedUserData.id, balance: updatedUserData.balance, updated_at: updatedUserData.updated_at }
+        });
     }
     catch (error) {
         console.error('Error Withdrawing fund:', error);

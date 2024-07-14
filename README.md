@@ -1,8 +1,8 @@
 ## App Name: DemoCredit
 
 ### Brief Description: 
-Welcome to the DemoCredit, Chiedozie's Lendsqr backend engineer assessment V2 mobile lending app MVP version that requires wallet functionality. This is needed as borrowers need a wallet to receive the loans they have been granted and also send the money for repayments.
-Indeed, is the backbone of our financial services that allows users to manage their finances effectively. This API provides four major features for the MVP version.
+Welcome to DemoCredit, a mobile lending backend API server app that requires wallet functionality. This is needed as borrowers need a wallet to receive the loans they have been granted and also send the money for repayments.
+Indeed, this project is literally the backbone of our financial services that allows users to manage their finances effectively. This API provides four major features for the MVP version.
 
 ### Table of Contents
 1. [Features](#features)
@@ -11,7 +11,7 @@ Indeed, is the backbone of our financial services that allows users to manage th
 4. [Contact](#contact)
 5. [Usage](#usage)
 6. [Installation](#installation)
-7. [Database design](#dbDisign E-R Diagram and link)
+7. [Database Design](#dbDisign E-R Diagram)
    
 ### Features 
 1. ## New User Creation
@@ -235,10 +235,10 @@ content-type: application/json
 - 403 Forbidden: If a user is blacklisted during account creation.
 * 400 Bad Request: If there are insufficient funds during transfers or withdrawals and
 + 500  For internal Server Error.
-+ And gracefully handled the rest errors for diffrent scenarios.
++ And other errors are gracefully handled for diffrent scenarios.
 
 
-### DemoCredit Database Design E-R Diagram Link
+### DemoCredit Database E-R Diagram And Design URL
 * Link: ***[dbDesigner Diagram](https://dbdesigner.page.link/Bc8UMtS5AC7XywUG8)***
   
   ![Database Design Diagram](images/demo-credit-db.png)
